@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<!-- <bean id="ff4j" class="org.ff4j.FF4j"> <property name="featureStore" 
+		ref="ff4j.store.inmemory" /> </bean> <bean id="ff4j.store.inmemory" class="org.ff4j.store.InMemoryFeatureStore"> 
+		<property name="fileName" value="ff4j.xml" /> <constructor-arg value="ff4j.xml" 
+		/> </bean> -->
+
+	<bean id="ff4j" class="org.ff4j.FF4j">
+		<property name="featureStore" ref="featureStoreSpringJdbc" />
+		<property name="propertiesStore" ref="propertyStoreSpringJdbc" />
+		<property name="eventRepository" ref="eventRepositoryJdbc" />
+		<property name="enableAudit" value="true" />
+	</bean>
+
+	<bean id="myFF4jProvider" class="com.docusign.featureToggleService.MyFF4jProvider" />
+	
+	<bean id="flippingExecutionContext" class="org.ff4j.core.FlippingExecutionContext"/>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.sqlite.JDBC" />
+		<property name="url"
+			value="jdbc:sqlite:C://DocuApi//featureToggleService//src//main//resources/featuresToggledb.sqlite" />
+	</bean>
+
+	<bean id="featureStoreSpringJdbc" class="org.ff4j.springjdbc.store.FeatureStoreSpringJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<bean id="propertyStoreSpringJdbc" class="org.ff4j.springjdbc.store.PropertyStoreSpringJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<bean id="eventRepositoryJdbc" class="org.ff4j.audit.repository.JdbcEventRepository">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+</beans>
