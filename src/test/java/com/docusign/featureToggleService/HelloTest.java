@@ -14,7 +14,6 @@ public class HelloTest {
 
 	@Test
 	public void my_first_test() {
-		// Given: file exist
 
 		assertNotNull(getClass().getClassLoader().getResourceAsStream("ff4j.xml"));
 		// When: init
